@@ -7,10 +7,12 @@ rng(42);
 [signal,Fs]=audioread('Greeting.wav');
 z = awgn(signal',5,'measured');              
 figure
+subplot(2,1,1);
 plot(z);
-hold on;
+title('Signal with AWGN');
+subplot(2,1,2);
 plot(signal);
-title('Original signal');
+title('Signal');
 
 %% PSO
 fprintf('--- Setting up PSO parameters ---\n');
@@ -22,8 +24,8 @@ Var1Max= fix(log2(length(signal)));         % Upper Bound of Variables
 Var2Min=-10;
 Var2Max=10;
 %PSO Params
-MaxIt=70;      % Iterations
-nPop=10;        % (Swarm Size)
+MaxIt=100;      % Iterations
+nPop=100;        % (Swarm Size)
 w=1;            % Inertia Weight
 wdamp=0.99;     % Inertia Weight Damping Ratio
 c1=1.1;         % Learning Coefficient
@@ -112,10 +114,6 @@ end
 cost = 20*log10(norm(signal(:)) / norm (signal(:)-mod_sig(:)));
 fprintf('--- SNR %d ---\n',cost);
 figure
-plot(z);hold on;
-plot(mod_sig);
-title('Recovered signal');
-figure
 subplot(1,3,1); specgram(signal,512,Fs); title('True Speech Signal');
 subplot(1,3,2); specgram(z,512,Fs); title('Noisy Speech Signal');
 subplot(1,3,3); specgram(mod_sig,512,Fs); title('De-noised Speech Signal');
@@ -125,13 +123,19 @@ subplot(1,3,3); specgram(mod_sig,512,Fs); title('De-noised Speech Signal');
 [Lo_D,Hi_D,Lo_R,Hi_R] = wfilters('db13');
 [c,ll]=wavedec(z,3,Lo_D,Hi_D);
 A=wrcoef('a',c,ll,Lo_R,Hi_R,3);
-mod_sig=A;
+mod_sig2=A;
 for i=1:3
     D = wrcoef('d',c,ll,Lo_R,Hi_R,i);
     thr = thselect(D,'minimaxi');
     tD = wthresh(D,'s',thr);
-    mod_sig=mod_sig+tD;
+    mod_sig2=mod_sig2+tD;
 end
-cost = 20*log10(norm(signal(:)) / norm (signal(:)-mod_sig(:)));
-fprintf('\n--- SNR (if only DWT) %d ---\n',cost);
-
+cost2 = 20*log10(norm(signal(:)) / norm (signal(:)-mod_sig2(:)));
+fprintf('\n--- SNR (if only DWT) %d ---\n',cost2);
+figure
+subplot(2,1,1);
+plot(mod_sig2);
+title('Using ThSelect and Level3');
+subplot(2,1,2);
+plot(mod_sig);
+title('Using PSO');
