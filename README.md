@@ -4,13 +4,19 @@ PSO Paraters
 Swarm sie 100
 Iterations 100
 
-Original Signal and Signal with AWGN
+##### Original Signal and Signal with AWGN
+<br />
+<br />
 ![alt text](https://raw.githubusercontent.com/vatsal-kandoi/PSO/master/Original.png)
 
-Denoised Signal
+##### Denoised Signal
+<br />
+<br />
 ![alt text](https://raw.githubusercontent.com/vatsal-kandoi/PSO/master/Denoised.png)
 
-Spectral Analysis
+##### Spectral Analysis
+<br />
+<br />
 ![alt text](https://raw.githubusercontent.com/vatsal-kandoi/PSO/master/Spectral.png)
 
 SNR 8.838440e+00
