@@ -1,5 +1,7 @@
 function cost = CostFunction(signal,z,l)
-    [Lo_D,Hi_D,Lo_R,Hi_R] = wfilters('db13');
+%% Function to calculate the SNR 
+%%
+[Lo_D,Hi_D,Lo_R,Hi_R] = wfilters('db13');
     [c,ll]=wavedec(z,l(1),Lo_D,Hi_D);
     A=wrcoef('a',c,ll,Lo_R,Hi_R,l(1));
     mod_sig=A;
